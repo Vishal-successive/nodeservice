@@ -1,0 +1,35 @@
+{
+  "name": "nodeservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:extra": "babel-node extra",
+    "start:extraTs": "tsc-watch --project . --onSuccess \"npm run nodemon\"",
+    "nodemon": "nodemon ./dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "./node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json --exclude 'node_modules/**/*.{j,t}s'",
+    "lint:fix": "npm run lint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vishal-successive/nodeservice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vishal-successive/nodeservice/issues"
+  },
+  "homepage": "https://github.com/Vishal-successive/nodeservice#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/node": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "tsc-watch": "^4.2.9",
+    "typescript": "^3.9.5"
+  }
+}
