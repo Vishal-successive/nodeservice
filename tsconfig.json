@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowJs": true /* Allow javascript files to be compiled. */,
     "checkJs": false /* Report errors in .js files. */,
     "sourceMap": true,
@@ -16,7 +16,5 @@
       "*": ["node_modules/*", "src/types/*"]
     }
   },
-  "exclude": ["dist"],
-  "include": ["extraTs"],
   "types": ["src/types"]
 }

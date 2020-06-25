@@ -1,26 +1,34 @@
 import express from "express";
-export class server {
-  config: string;
+import bodyParser from "body-parser";
+import { IConfig } from "./config/IConfig";
+export default class Server {
+  config: IConfig;
+  app = express();
 
-  constructor(config: string) {
+  constructor(config: IConfig) {
     this.config = config;
   }
-
   bootstrap() {
     this.setupRoutes();
+    this.initBodyParser();
     return this;
   }
 
   setupRoutes() {
-    let router = express.Router();
-    router.get("/health-check", function (req, res) {
+    console.log("Hello");
+    this.app.get("/health-check", (req, res) => {
       res.send("I am OK");
+      res.end();
     });
   }
   run() {
-    const app = express();
-    app.listen(3000, function () {
+    this.app.listen(Number(this.config.port), () => {
       console.log("Ready");
     });
+    return this;
+  }
+
+  initBodyParser() {
+    this.app.use(bodyParser.urlencoded({ extended: false }));
   }
 }
