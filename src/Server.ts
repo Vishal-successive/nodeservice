@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { IConfig } from "./config/IConfig";
+import router from "./router";
 export default class Server {
   config: IConfig;
   app = express();
@@ -20,10 +21,11 @@ export default class Server {
       res.send("I am OK");
       res.end();
     });
+    this.app.use("/api", router);
   }
   run() {
     this.app.listen(Number(this.config.port), () => {
-      console.log("Ready");
+      console.log("Success");
     });
     return this;
   }
