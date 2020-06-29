@@ -16,7 +16,6 @@ export default class Server {
   }
 
   setupRoutes() {
-    console.log("Hello");
     this.app.get("/health-check", (req, res) => {
       res.send("I am OK");
       res.end();

@@ -1,18 +1,20 @@
 import Joi from "@hapi/joi";
-const middleware = (schema, property) => {
+export const middleware = (schema) => {
   return (req, res, next) => {
-    const { error } = Joi.validate(req.body, schema);
-    const valid = error == null;
-
+    let error;
+    Object.keys(schema).forEach((key) => {
+      const obj = schema[key];
+      const response = obj.validate(req[key]);
+      error = response.error;
+    });
+    const valid = error === undefined;
     if (valid) {
       next();
     } else {
       const { details } = error;
       const message = details.map((i) => i.message).join(",");
-
-      console.log("error", message);
+      console.log("error: ", message);
       res.status(422).json({ error: message });
     }
   };
 };
-module.exports = middleware;
