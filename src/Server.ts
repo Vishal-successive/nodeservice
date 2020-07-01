@@ -2,6 +2,11 @@ import express from "express";
 import bodyParser from "body-parser";
 import { IConfig } from "./config/IConfig";
 import router from "./router";
+import dotenv from "dotenv";
+const { parsed } = dotenv.config();
+const { MONGO_URL } = parsed;
+import Database from "./libs/Database";
+const db = new Database();
 export default class Server {
   config: IConfig;
   app = express();
@@ -10,8 +15,9 @@ export default class Server {
     this.config = config;
   }
   bootstrap() {
-    this.setupRoutes();
     this.initBodyParser();
+    this.app.use(bodyParser.json());
+    this.setupRoutes();
     return this;
   }
 
@@ -23,6 +29,7 @@ export default class Server {
     this.app.use("/api", router);
   }
   run() {
+    db.open(MONGO_URL);
     this.app.listen(Number(this.config.port), () => {
       console.log("Success");
     });
