@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-export const UserSchema = new mongoose.Schema({
+export const VersionableSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: String,
-  password: String,
+  version: Number,
 });

@@ -15,3 +15,8 @@ export const userCount = async () => {
   const result = await User.countDocuments({});
   return result;
 };
+export const readUserById = async (id) => {
+  const result = await User.findById(id);
+  console.log(result);
+  return result;
+};

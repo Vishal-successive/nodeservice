@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { IConfig } from "./config/IConfig";
-import router from "./router";
+import { router, userRouter } from "./router";
 import dotenv from "dotenv";
 const { parsed } = dotenv.config();
 const { MONGO_URL } = parsed;
@@ -26,7 +26,8 @@ export default class Server {
       res.send("I am OK");
       res.end();
     });
-    this.app.use("/api", router);
+    // this.app.use("/api", router);
+    this.app.use("/api", userRouter);
   }
   run() {
     db.open(MONGO_URL);

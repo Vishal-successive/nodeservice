@@ -1,7 +1,7 @@
 import express from "express";
 import { authMiddleWare } from "../../libs/routes/authMiddleWare";
 import { moduleName, permissionTypes } from "../../utils/constants";
-import { middleware } from "../../libs/middleware";
+import { middleware } from "../../libs/validationMiddleware";
 import { schemas } from "./validate";
 const router = express.Router();
 router.get(

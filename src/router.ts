@@ -1,2 +1,3 @@
 import router from "./controllers/trainee/routes";
-export default router;
+import userRouter from "./controllers/user/routes";
+export  { router, userRouter };

@@ -1,6 +1,7 @@
 import Joi from "@hapi/joi";
 export const middleware = (schema) => {
   return (req, res, next) => {
+    console.log("validationMidleware...");
     let error;
     Object.keys(schema).forEach((key) => {
       const obj = schema[key];
