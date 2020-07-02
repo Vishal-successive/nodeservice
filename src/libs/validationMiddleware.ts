@@ -10,6 +10,7 @@ export const middleware = (schema) => {
     });
     const valid = error === undefined;
     if (valid) {
+      console.log("Valid...");
       next();
     } else {
       const { details } = error;

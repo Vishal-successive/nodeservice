@@ -3,9 +3,10 @@ import bodyParser from "body-parser";
 import { IConfig } from "./config/IConfig";
 import { router, userRouter } from "./router";
 import dotenv from "dotenv";
+import Database from "./libs/Database";
+
 const { parsed } = dotenv.config();
 const { MONGO_URL } = parsed;
-import Database from "./libs/Database";
 const db = new Database();
 export default class Server {
   config: IConfig;
@@ -26,7 +27,7 @@ export default class Server {
       res.send("I am OK");
       res.end();
     });
-    // this.app.use("/api", router);
+    this.app.use("/api", router);
     this.app.use("/api", userRouter);
   }
   run() {
