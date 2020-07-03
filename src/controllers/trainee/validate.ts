@@ -10,6 +10,7 @@ export const schemas = {
         .default(10)
         .messages({ error: "Limit is invalid" })
         .required(),
+      id: Joi.string(),
     }),
   },
 
@@ -23,10 +24,12 @@ export const schemas = {
   post: {
     body: Joi.object()
       .keys({
-        id: Joi.string().required().messages({ error: "Id is invalid" }),
         name: Joi.string().required().messages({ error: "Name is required" }),
-      })
-      .required(),
+        email: Joi.string().required().messages({ error: "Id is invalid" }),
+        password: Joi.string()
+          .required()
+          .messages({ error: "Password is invalid" }),
+      }),
   },
 
   delete: {

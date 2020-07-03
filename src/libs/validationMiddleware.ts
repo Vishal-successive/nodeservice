@@ -5,7 +5,7 @@ export const middleware = (schema) => {
     let error;
     Object.keys(schema).forEach((key) => {
       const obj = schema[key];
-      const response = obj.validate(req[key]);
+      const response = obj.validate(req[key], { allowUnknown: true });
       error = response.error;
     });
     const valid = error === undefined;

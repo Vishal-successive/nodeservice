@@ -1,17 +1,107 @@
+import bcrypt from "bcrypt";
+import {
+  readUser,
+  userCount,
+  readUserById,
+  deleteUserById,
+  createUser,
+  updateUserById,
+} from "../../repositories/user/UserRepository";
+const saltRounds = 10;
 export default class Controller {
-  getRoute() {
-    return "This is getRoute";
-  }
+  getTraineeById = async (req, res) => {
+    try {
+      const user = await readUserById(req.query.id);
+      if (!user) {
+        return res.status(404).json("User Not found");
+      }
+      return res.status(200).json({
+        User: user,
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send(error.message);
+    }
+  };
 
-  putRoute() {
-    return "This is putRoute";
-  }
+  updateTrainee = async (req, res) => {
+    try {
+      const { id, dataToUpdate } = req.body;
+      const oldUserData = await updateUserById(id, dataToUpdate);
+      if (!oldUserData) {
+        return res.status(404).json("User Not Updated");
+      }
+      const newUserData = await readUserById(id);
+      return res.status(200).json({
+        "Previous Data": oldUserData,
+        "Updated Data": newUserData,
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send(error.message);
+    }
+  };
 
-  postRoute() {
-    return "This is postRoute";
-  }
+  createTrainee = async (req, res) => {
+    try {
+      const { name, email, password } = req.body;
+      const hash = await bcrypt.hash(password, saltRounds);
+      const user = await createUser({
+        name,
+        email,
+        password: hash,
+      });
+      console.log("Created", user);
+      if (!user) {
+        return res.status(404).json("User Not Created");
+      }
+      return res.status(200).json({
+        User: user,
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send(error.message);
+    }
+  };
 
-  deleteRoute() {
-    return "This is deleteRoute";
-  }
+  deleteTraineeById = async (req, res) => {
+    try {
+      const user = await deleteUserById(req.params.id);
+      if (!user) return res.status(404).json("No User found to Delete");
+      return res.json({
+        User: user,
+      });
+    } catch (err) {
+      console.error(err.message);
+      return res.status(500).send(err.message);
+    }
+  };
+
+  getAllTrainee = async (req, res) => {
+    try {
+      const skip = Number(req.query.skip);
+      const limit = Number(req.query.limit);
+      const trainee = await readUser(
+        {},
+        {},
+        {
+          skip,
+          limit,
+          sort: {
+            name: "1",
+          },
+        }
+      );
+
+      const count = await userCount();
+
+      res.json({
+        "All Trainees": trainee,
+        totalPages: Math.ceil(count / limit),
+      });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send(err.message);
+    }
+  };
 }

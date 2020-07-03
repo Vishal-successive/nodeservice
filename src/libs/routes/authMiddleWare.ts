@@ -6,25 +6,41 @@ const config = dotenv.config();
 const { AUTH_KEY } = config.parsed;
 export const authMiddleWare = (module, permissionType) => {
   return (req, res, next) => {
-    const token = req.headers.authorization.replace("Bearer ", "");
-    if (!token) return res.status(403).json({ error: "Token not found" });
-    jwt.verify(token, AUTH_KEY, async (err, decoded) => {
-      if (err) {
-        console.log(err.message);
-        return res.status(403).json({ error: "Unauthorized Access" });
-      }
-      console.log("User = ", decoded);
-      // const permission = hasPermission(module, decoded.role, permissionType);
-      // if (permission === false) {
-      //   return res.status(403).json({ error: "Unauthorized User" });
-      // }
-      const user = await readUserById(decoded.id);
-      if (!user) {
-        return res.status(404).json({ error: "User Not Found in DB" });
-      }
-      req.body.data = user;
-      console.log("Calling next middleware...");
-      next();
-    });
+    let token = req.headers.authorization;
+    if (token && token.startsWith("Bearer ")) {
+      token = token.slice(7, token.length);
+      jwt.verify(token, AUTH_KEY, async (err, decoded) => {
+        if (err) {
+          return res.status(401).json({
+            result: false,
+            message: "Token invalid",
+          });
+        } else if (decoded.role) {
+          console.log("User = ", decoded);
+          const permission = hasPermission(
+            module,
+            decoded.role,
+            permissionType
+          );
+          if (permission === false) {
+            return res
+              .status(403)
+              .json({ result: false, message: "Unauthorized User" });
+          }
+          const user = await readUserById(decoded.id);
+          req.body.data = user;
+          console.log("Calling next middleware...");
+          next();
+        } else {
+          console.log("Auth Validated, Calling next middleware...");
+          next();
+        }
+      });
+    } else {
+      res.status(400).json({
+        result: false,
+        message: "Token missing",
+      });
+    }
   };
 };

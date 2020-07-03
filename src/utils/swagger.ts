@@ -1,6 +1,5 @@
 export const swaggerOptions = {
   swaggerDefinition: {
-    openapi: "3.0.1",
     info: {
       version: "1.0.0",
       title: "Trainee API",
@@ -10,21 +9,16 @@ export const swaggerOptions = {
         email: "vishal.kumar@successive.tech",
       },
     },
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-        },
+    host: "localhost:9000",
+    basePath: "/api",
+    securityDefinitions: {
+      bearerAuth: {
+        type: "apiKey",
+        name: "Authorization",
+        scheme: "bearer",
+        in: "header",
       },
     },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
   },
-  servers: [{ url: "http://localhost:9000/api", description: "Local server" }],
   apis: ["./src/controllers/trainee/routes.ts"],
 };
