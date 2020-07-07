@@ -6,7 +6,7 @@ import { userSchemas } from "./validationSchema";
 import { middleware } from "../../libs/validationMiddleware";
 import dotenv from "dotenv";
 const config = dotenv.config();
-const { password } = config.parsed;
+const { AUTH_KEY } = config.parsed;
 const userRouter = express.Router();
 userRouter.get(
   "/",
@@ -50,14 +50,13 @@ userRouter.delete(
 userRouter.post("/login", middleware(userSchemas.post), async (req, res) => {
   console.log("/login route");
   const { email, id } = req.body;
-  await jwt.sign({ email, id }, password, { expiresIn: 900 }, (err, token) => {
+  await jwt.sign({ email, id }, AUTH_KEY, { expiresIn: 900 }, (err, token) => {
     if (err) {
       console.log(err.message);
       res.status(404).json({ error: err.message });
     }
     console.log("Token = ", token);
-    res.send(token);
-    res.end();
+    res.send(token).end();
   });
 });
 

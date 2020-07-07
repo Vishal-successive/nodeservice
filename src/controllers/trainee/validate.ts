@@ -2,14 +2,8 @@ import Joi from "@hapi/joi";
 export const schemas = {
   get: {
     query: Joi.object().keys({
-      skip: Joi.number()
-        .default(0)
-        .messages({ error: "Skip is invalid" })
-        .required(),
-      limit: Joi.number()
-        .default(10)
-        .messages({ error: "Limit is invalid" })
-        .required(),
+      skip: Joi.number().default(0).messages({ error: "Skip is invalid" }),
+      limit: Joi.number().default(10).messages({ error: "Limit is invalid" }),
       id: Joi.string(),
     }),
   },
@@ -22,14 +16,13 @@ export const schemas = {
   },
 
   post: {
-    body: Joi.object()
-      .keys({
-        name: Joi.string().required().messages({ error: "Name is required" }),
-        email: Joi.string().required().messages({ error: "Id is invalid" }),
-        password: Joi.string()
-          .required()
-          .messages({ error: "Password is invalid" }),
-      }),
+    body: Joi.object().keys({
+      name: Joi.string().required().messages({ error: "Name is required" }),
+      email: Joi.string().required().messages({ error: "Id is invalid" }),
+      password: Joi.string()
+        .required()
+        .messages({ error: "Password is invalid" }),
+    }),
   },
 
   delete: {

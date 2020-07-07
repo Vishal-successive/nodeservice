@@ -15,9 +15,7 @@ export default class Controller {
       if (!user) {
         return res.status(404).json("User Not found");
       }
-      return res.status(200).json({
-        User: user,
-      });
+      return res.status(200).json(user);
     } catch (error) {
       console.log(error.message);
       res.status(500).send(error.message);
@@ -33,8 +31,8 @@ export default class Controller {
       }
       const newUserData = await readUserById(id);
       return res.status(200).json({
-        "Previous Data": oldUserData,
-        "Updated Data": newUserData,
+        PreviousData: oldUserData,
+        UpdatedData: newUserData,
       });
     } catch (error) {
       console.log(error.message);
@@ -51,13 +49,12 @@ export default class Controller {
         email,
         password: hash,
       });
-      console.log("Created", user);
       if (!user) {
         return res.status(404).json("User Not Created");
       }
-      return res.status(200).json({
-        User: user,
-      });
+
+      console.log("Created", user);
+      return res.status(200).json(user);
     } catch (error) {
       console.log(error.message);
       res.status(500).send(error.message);
@@ -67,10 +64,8 @@ export default class Controller {
   deleteTraineeById = async (req, res) => {
     try {
       const user = await deleteUserById(req.params.id);
-      if (!user) return res.status(404).json("No User found to Delete");
-      return res.json({
-        User: user,
-      });
+      if (!user) return res.status(404).send("User Not found");
+      return res.json({ DeletedData: user });
     } catch (err) {
       console.error(err.message);
       return res.status(500).send(err.message);
@@ -95,9 +90,9 @@ export default class Controller {
 
       const count = await userCount();
 
-      res.json({
-        "All Trainees": trainee,
-        totalPages: Math.ceil(count / limit),
+      return res.json({
+        AllTrainees: trainee,
+        TotalPages: Math.ceil(count / limit),
       });
     } catch (err) {
       console.error(err.message);
